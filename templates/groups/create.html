@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Secret Santa Group{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h2 class="text-center mb-4">
+                    <i class="fas fa-gifts text-danger"></i> Create New Group
+                </h2>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Group Name *</label>
+                        {{ form.name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        {{ form.description }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Budget Limit ($)</label>
+                        {{ form.budget_limit }}
+                        <small class="form-text text-muted">Optional spending limit per gift</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-santa w-100">
+                        <i class="fas fa-plus-circle"></i> Create Group
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

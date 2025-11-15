@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>🎅 Secret Santa Matcher</h1>
+        <p class="lead">Organize your perfect Secret Santa gift exchange with ease!</p>
+        
+        {% if user.is_authenticated %}
+            <div class="mt-4">
+                <a href="{% url 'groups:create' %}" class="btn btn-santa btn-lg me-3">
+                    <i class="fas fa-plus-circle"></i> Create New Group
+                </a>
+                <a href="{% url 'groups:join' %}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-sign-in-alt"></i> Join Group
+                </a>
+            </div>
+        {% else %}
+            <div class="mt-4">
+                <a href="{% url 'accounts:signup' %}" class="btn btn-santa btn-lg me-3">
+                    Get Started Free
+                </a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                    Login
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <div class="feature-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3>Easy Setup</h3>
+                <p>Create a group and invite members with a simple code</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <div class="feature-icon">
+                    <i class="fas fa-random"></i>
+                </div>
+                <h3>Auto Matching</h3>
+                <p>Our algorithm pairs everyone fairly and secretly</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <div class="feature-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Instant Notifications</h3>
+                <p>Everyone gets notified with their match via email</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
