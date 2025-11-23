@@ -16,6 +16,12 @@ Each member joins via an invite link, enters their details (and gift wishlist), 
 - Gift Wishlist	Optional — users can write 3 gift ideas
 - Reveal Mode (Optional)	After Christmas, everyone can see who their Santa was 🎅
 
+<img width="1281" height="946" alt="image" src="https://github.com/user-attachments/assets/f586d9e2-dd22-490b-b312-83cb792ca2df" />
+<img width="1281" height="946" alt="image" src="https://github.com/user-attachments/assets/16d13e55-26eb-4ffc-929b-a0f4be7c094e" />
+
+
+<img width="1281" height="946" alt="image" src="https://github.com/user-attachments/assets/7e79ae2e-6233-47f8-b743-ec2705395d08" />
+<img width="1281" height="946" alt="image" src="https://github.com/user-attachments/assets/0d496720-c6c1-469e-882a-5532f53e9cee" />
 
 ## 2. Tech Stack
 
