@@ -1,55 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %}Profile{% endblock %}
-
+{% block title %}My Settings | Secret Santa{% endblock %}
 {% block content %}
 <div class="container py-5">
     <div class="row">
-        <div class="col-md-4">
-            <div class="card p-4">
-                <div class="text-center mb-3">
-                    <i class="fas fa-user-circle" style="font-size: 5rem; color: var(--santa-red);"></i>
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 text-center">
+                <div class="mb-3">
+                    <div style="width:100px;height:100px;background:linear-gradient(135deg,var(--santa-red),#ff6b6b);border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;">
+                        <span style="font-size:2.5rem;color:white;">{{ user.first_name|slice:":1"|upper|default:user.username|slice:":1"|upper }}</span>
+                    </div>
                 </div>
-                <h3 class="text-center">{{ user.username }}</h3>
+                <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                <p class="text-muted">@{{ user.username }}</p>
                 <hr>
-                <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                {% if user.phone_number %}
-                    <p><strong>Phone:</strong> {{ user.phone_number }}</p>
-                {% endif %}
+                <div class="text-start">
+                    <p><i class="fas fa-envelope me-2 text-muted"></i>{{ user.email }}</p>
+                    <p><i class="fas fa-users me-2 text-muted"></i>{{ total_groups }} group{{ total_groups|pluralize }}</p>
+                </div>
             </div>
         </div>
-        
         <div class="col-md-8">
             <div class="card p-4">
-                <h3>My Secret Santa Groups</h3>
-                
-                {% if groups %}
-                    <div class="list-group">
-                        {% for membership in groups %}
-                            <a href="{% url 'groups:detail' membership.group.id %}" class="list-group-item list-group-item-action">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="mb-1">{{ membership.group.name }}</h5>
-                                        <small class="text-muted">
-                                            Host: {{ membership.group.host.first_name|default:membership.group.host.username }}
-                                        </small>
-                                    </div>
-                                    <div>
-                                        {% if membership.group.matching_done %}
-                                            <span class="badge bg-success">Matched ✓</span>
-                                        {% else %}
-                                            <span class="badge bg-warning">Pending</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </a>
-                        {% endfor %}
+                <h4 class="mb-4"><i class="fas fa-cog me-2"></i>Account Settings</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
                     </div>
-                {% else %}
-                    <p class="text-muted">You haven't joined any groups yet.</p>
-                    <a href="{% url 'groups:join' %}" class="btn btn-santa">Join a Group</a>
-                {% endif %}
+                    {% endfor %}
+                    <button type="submit" class="btn btn-santa">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                </form>
             </div>
         </div>
     </div>

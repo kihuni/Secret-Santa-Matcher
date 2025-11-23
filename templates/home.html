@@ -1,60 +1,57 @@
 {% extends 'base.html' %}
 
+{% block title %}Secret Santa Matcher - Easy Gift Exchange Organizer{% endblock %}
 {% block content %}
 <div class="hero-section">
     <div class="container">
-        <h1>🎅 Secret Santa Matcher</h1>
-        <p class="lead">Organize your perfect Secret Santa gift exchange with ease!</p>
-        
+        <h1>🎅 Secret Santa<br>Made Simple</h1>
+        <p class="lead mb-4" style="font-size: 1.3rem; opacity: 0.9;">
+            Create a group, invite friends & family, and let us handle the matching magic!
+        </p>
         {% if user.is_authenticated %}
-            <div class="mt-4">
-                <a href="{% url 'groups:create' %}" class="btn btn-santa btn-lg me-3">
-                    <i class="fas fa-plus-circle"></i> Create New Group
-                </a>
-                <a href="{% url 'groups:join' %}" class="btn btn-outline-light btn-lg">
-                    <i class="fas fa-sign-in-alt"></i> Join Group
-                </a>
-            </div>
+        <div class="mt-4">
+            <a href="{% url 'groups:create' %}" class="btn btn-santa btn-lg me-3 mb-2">
+                <i class="fas fa-magic me-2"></i>Create Group
+            </a>
+            <a href="{% url 'groups:join' %}" class="btn btn-outline-light btn-lg mb-2">
+                <i class="fas fa-ticket-alt me-2"></i>Join with Code
+            </a>
+        </div>
         {% else %}
-            <div class="mt-4">
-                <a href="{% url 'accounts:signup' %}" class="btn btn-santa btn-lg me-3">
-                    Get Started Free
-                </a>
-                <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
-                    Login
-                </a>
-            </div>
+        <div class="mt-4">
+            <a href="{% url 'accounts:signup' %}" class="btn btn-santa btn-lg me-3 mb-2">
+                <i class="fas fa-rocket me-2"></i>Get Started Free
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg mb-2">
+                Already have an account?
+            </a>
+        </div>
         {% endif %}
     </div>
 </div>
 
 <div class="container py-5">
+    <h2 class="text-center text-white mb-5">How It Works</h2>
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card text-center p-4">
-                <div class="feature-icon">
-                    <i class="fas fa-user-plus"></i>
-                </div>
-                <h3>Easy Setup</h3>
-                <p>Create a group and invite members with a simple code</p>
+            <div class="card h-100 p-4 text-center">
+                <div class="feature-icon"><i class="fas fa-users"></i></div>
+                <h4>1. Create a Group</h4>
+                <p class="text-muted">Start a new Secret Santa group and get a unique invite code to share.</p>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-center p-4">
-                <div class="feature-icon">
-                    <i class="fas fa-random"></i>
-                </div>
-                <h3>Auto Matching</h3>
-                <p>Our algorithm pairs everyone fairly and secretly</p>
+            <div class="card h-100 p-4 text-center">
+                <div class="feature-icon"><i class="fas fa-list-ul"></i></div>
+                <h4>2. Add Wishlists</h4>
+                <p class="text-muted">Everyone joins and adds gift ideas to help their Secret Santa.</p>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-center p-4">
-                <div class="feature-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <h3>Instant Notifications</h3>
-                <p>Everyone gets notified with their match via email</p>
+            <div class="card h-100 p-4 text-center">
+                <div class="feature-icon"><i class="fas fa-magic"></i></div>
+                <h4>3. Get Matched!</h4>
+                <p class="text-muted">One click and everyone is secretly paired. No awkward self-matches!</p>
             </div>
         </div>
     </div>

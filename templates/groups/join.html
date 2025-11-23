@@ -1,29 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}Join Secret Santa Group{% endblock %}
-
+{% block title %}Join Group | Secret Santa{% endblock %}
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card p-4">
-                <h2 class="text-center mb-4">
-                    <i class="fas fa-sign-in-alt text-success"></i> Join a Group
-                </h2>
-                
-                <p class="text-center text-muted">
-                    Enter the invite code shared by your group host
-                </p>
-                
+        <div class="col-md-5">
+            <div class="card p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-ticket-alt fa-3x" style="color: var(--santa-green);"></i>
+                    <h2 class="mt-3">Join a Group</h2>
+                    <p class="text-muted">Enter the invite code from your group host</p>
+                </div>
                 <form method="post">
                     {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        {{ form.invite_code }}
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Invite Code</label>
+                        <input type="text" name="invite_code" class="form-control form-control-lg text-center" 
+                               placeholder="XXXX-XXXX" style="letter-spacing:3px;font-weight:600;text-transform:uppercase;"
+                               value="{{ form.invite_code.value|default:'' }}" required>
                     </div>
-                    
-                    <button type="submit" class="btn btn-santa w-100">
-                        <i class="fas fa-door-open"></i> Join Group
+                    <button type="submit" class="btn btn-santa w-100 py-3">
+                        <i class="fas fa-door-open me-2"></i>Join Group
                     </button>
                 </form>
             </div>
