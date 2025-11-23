@@ -52,11 +52,11 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="fas fa-cog me-2"></i>Settings</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                             </ul>
                         </li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li>
                         <li class="nav-item ms-2"><a class="btn btn-santa btn-sm" href="{% url 'accounts:signup' %}">Get Started</a></li>
                     {% endif %}
                 </ul>

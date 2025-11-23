@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Wishlist | Secret Santa{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-list-ul fa-3x" style="color: var(--santa-green);"></i>
+                    <h2 class="mt-3">Your Gift Wishlist</h2>
+                    <p class="text-muted">Help your Secret Santa by sharing some gift ideas!</p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Gift Ideas</label>
+                        <textarea name="wishlist" class="form-control" rows="6" 
+                                  placeholder="1. A cozy sweater (size M)&#10;2. Any book by Stephen King&#10;3. Coffee mug with funny quote&#10;&#10;Feel free to include links, sizes, or specific details!">{{ form.wishlist.value|default:'' }}</textarea>
+                        <small class="text-muted">Tip: Be specific! Include sizes, colors, links, or brands to help your Santa.</small>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-santa py-3">
+                            <i class="fas fa-save me-2"></i>Save Wishlist
+                        </button>
+                        <a href="{% url 'groups:detail' group.invite_code %}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

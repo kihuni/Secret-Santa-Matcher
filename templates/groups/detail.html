@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ group.name }} | Secret Santa{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="card p-4 mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="mb-1">🎄 {{ group.name }}</h2>
+                {% if group.description %}<p class="text-muted mb-2">{{ group.description }}</p>{% endif %}
+                <div class="d-flex gap-3 flex-wrap">
+                    <span class="text-muted"><i class="fas fa-user-tie me-1"></i> Host: <strong>{{ group.host.first_name|default:group.host.username }}</strong></span>
+                    {% if group.budget_limit %}<span class="text-muted"><i class="fas fa-dollar-sign me-1"></i> Budget: <strong>${{ group.budget_limit }}</strong></span>{% endif %}
+                    <span class="text-muted"><i class="fas fa-users me-1"></i> <strong>{{ member_count }}</strong> participant{{ member_count|pluralize }}</span>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                {% if group.matching_done %}
+                <span class="status-badge status-matched"><i class="fas fa-check-circle me-1"></i> Matching Complete!</span>
+                {% else %}
+                <span class="status-badge status-pending"><i class="fas fa-hourglass-half me-1"></i> Awaiting Matching</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Action Card -->
+            <div class="card p-4 mb-4">
+                {% if group.matching_done %}
+                    <!-- Matched State -->
+                    <div class="text-center py-4">
+                        <i class="fas fa-gift fa-4x mb-3" style="color: var(--santa-red);"></i>
+                        <h3>The matching is done! 🎉</h3>
+                        <p class="text-muted mb-4">Click below to see who you're buying a gift for.</p>
+                        <a href="{% url 'groups:my_match' group.invite_code %}" class="btn btn-santa btn-lg">
+                            <i class="fas fa-eye me-2"></i>Reveal My Match
+                        </a>
+                    </div>
+                {% else %}
+                    <!-- Pre-Match State -->
+                    {% if is_host %}
+                    <div class="text-center py-4">
+                        <h4 class="mb-3">Ready to Match?</h4>
+                        <p class="text-muted">Once everyone has joined, run the matching algorithm to pair up your Secret Santas!</p>
+                        
+                        <div class="alert alert-info text-start mb-4">
+                            <strong>Checklist:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>{{ member_count }} participant{{ member_count|pluralize }} joined {% if member_count >= 2 %}✅{% else %}(need at least 2){% endif %}</li>
+                                <li>{{ wishlist_count }} wishlist{{ wishlist_count|pluralize }} added</li>
+                            </ul>
+                        </div>
+                        
+                        <form method="post" action="{% url 'groups:run_matching' group.invite_code %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-santa btn-lg" {% if member_count < 2 %}disabled{% endif %}>
+                                <i class="fas fa-magic me-2"></i>Run Matching Now
+                            </button>
+                        </form>
+                        {% if member_count < 2 %}
+                        <small class="text-danger mt-2 d-block">Need at least 2 participants to match</small>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-clock fa-3x mb-3" style="color: #ffc107;"></i>
+                        <h4>Waiting for Host</h4>
+                        <p class="text-muted">The group host will run the matching when everyone has joined.</p>
+                        <p class="mb-0">In the meantime, make sure to <a href="{% url 'groups:edit_wishlist' group.invite_code %}">add your wishlist</a>!</p>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- Participants -->
+            <div class="card p-4">
+                <h5 class="mb-4"><i class="fas fa-users me-2"></i>Participants ({{ member_count }})</h5>
+                <div class="row g-3">
+                    {% for member in members %}
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 rounded" style="background:#f8f9fa;">
+                            <div class="member-avatar">{{ member.user.first_name|slice:":1"|upper|default:member.user.username|slice:":1"|upper }}</div>
+                            <div class="ms-3">
+                                <strong>{{ member.user.first_name|default:member.user.username }} {{ member.user.last_name }}</strong>
+                                {% if member.user == group.host %}<span class="badge bg-warning text-dark ms-2">Host</span>{% endif %}
+                                {% if member.user == request.user %}<span class="badge bg-info ms-2">You</span>{% endif %}
+                                <br>
+                                <small class="text-muted">
+                                    {% if member.wishlist %}
+                                    <i class="fas fa-check text-success me-1"></i>Wishlist added
+                                    {% else %}
+                                    <i class="fas fa-times text-danger me-1"></i>No wishlist yet
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Invite Code Card -->
+            <div class="card p-4 mb-4">
+                <h5 class="text-center mb-3"><i class="fas fa-share-alt me-2"></i>Invite Others</h5>
+                <div class="invite-code-box text-center">
+                    <small class="text-muted d-block mb-2">Share this code:</small>
+                    <div class="invite-code" id="inviteCode">{{ group.invite_code }}</div>
+                    <button class="btn btn-outline-secondary btn-sm mt-3" onclick="copyCode()">
+                        <i class="fas fa-copy me-1"></i>Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Your Wishlist Card -->
+            <div class="card p-4 mb-4">
+                <h5 class="mb-3"><i class="fas fa-list-ul me-2"></i>Your Wishlist</h5>
+                {% if user_member.wishlist %}
+                <div class="p-3 rounded" style="background:#f8f9fa; white-space:pre-line;">{{ user_member.wishlist }}</div>
+                {% else %}
+                <p class="text-muted mb-0">You haven't added any gift ideas yet.</p>
+                {% endif %}
+                <a href="{% url 'groups:edit_wishlist' group.invite_code %}" class="btn btn-outline-santa w-100 mt-3">
+                    <i class="fas fa-edit me-1"></i>{% if user_member.wishlist %}Edit{% else %}Add{% endif %} Wishlist
+                </a>
+            </div>
+
+            <!-- Leave/Delete -->
+            {% if not group.matching_done %}
+            <div class="card p-4 border-danger">
+                <h6 class="text-danger mb-3"><i class="fas fa-exclamation-triangle me-2"></i>Danger Zone</h6>
+                {% if is_host %}
+                <form method="post" action="{% url 'groups:delete' group.invite_code %}" onsubmit="return confirm('Are you sure you want to delete this group? This cannot be undone!');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                        <i class="fas fa-trash me-1"></i>Delete Group
+                    </button>
+                </form>
+                {% else %}
+                <form method="post" action="{% url 'groups:leave' group.invite_code %}" onsubmit="return confirm('Are you sure you want to leave this group?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                        <i class="fas fa-sign-out-alt me-1"></i>Leave Group
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
